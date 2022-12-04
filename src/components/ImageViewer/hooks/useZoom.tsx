@@ -16,11 +16,11 @@ export default function useZoom() {
     let speed = 0.1;
     const id = setInterval(() => {
       setZoom((prev) => {
-        if (speed < 0.001) {
+        if (speed < 0.002) {
           clearInterval(id);
           return prev;
         }
-        speed *= 0.9;
+        speed *= 0.8;
         return clamp(prev + delta * speed, 0.8, 5);
       });
     }, 20);

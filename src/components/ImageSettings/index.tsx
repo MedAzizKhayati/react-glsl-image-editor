@@ -1,7 +1,6 @@
 import { Settings } from "../ImageViewer";
 import SettingsSection from "./SettingsSection";
 import SliderInput from "./SliderInput";
-import ToggleIcon from "./ToggleIcon";
 
 export interface ImageSettingsProps {
   settings: Settings;
@@ -13,8 +12,6 @@ export interface ImageSettingsProps {
 export default function ImageSettings({
   settings,
   setSettings,
-  open,
-  setOpen,
 }: ImageSettingsProps) {
   const {
     blurRadius = 0,
@@ -29,8 +26,7 @@ export default function ImageSettings({
 
   return (
     <div
-      className={`w-full max-w-[800px] mx-auto flex gap-5 justify-between p-5 rounded-t-2xl  mt-10 px-10
-         text-white`}
+      className={`w-full max-w-[800px] flex gap-5 justify-between p-7 px-10 text-white`}
     >
       <SettingsSection title="spacial filters">
         <div className="flex gap-5 mr-auto">

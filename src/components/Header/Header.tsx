@@ -1,6 +1,3 @@
-import React from "react";
-import { useUploadedImage } from "../ImageViewer/hooks/useUploadedImage";
-
 export const Header = ({
   setImageUrl,
 }: {
@@ -15,7 +12,7 @@ export const Header = ({
     }
   };
   return (
-    <div className="w-full h-20 flex flex-row max-w-[1200px] mx-auto justify-between items-center px-10">
+    <div className="w-full py-5 flex flex-row justify-between items-center px-10">
       <a className="px-4 py-2 bg-[#2c2c2c] rounded-lg text-gray-500 transition-all duration-300 cursor-pointer hover:text-white hover:bg-buttonBlue">
         Check our github
       </a>

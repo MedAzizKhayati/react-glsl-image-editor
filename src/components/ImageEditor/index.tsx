@@ -17,7 +17,7 @@ export default function ImageEditor() {
   }, [url]);
 
   return (
-    <div className="w-full h-full relative flex-start overflow-hidden bg-[#121212]">
+    <div className="w-full h-full relative flex flex-col items-center overflow-hidden bg-[#121212]">
       <Header setImageUrl={setImageUrl} />
       <ImageViewer {...settings} />
       <ImageSettings
