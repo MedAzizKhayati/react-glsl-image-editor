@@ -45,7 +45,7 @@ vec4 adjustNoise(vec4 color, vec2 uv, float value) {
 }
 
 vec4 preProcess(vec4 color, vec2 uv) {
-    color = adjustNoise(color, vUv, noise);
+    color = adjustNoise(color, uv, noise);
     return color;
 }
 
