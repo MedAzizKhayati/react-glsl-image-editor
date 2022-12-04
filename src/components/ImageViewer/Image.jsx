@@ -32,6 +32,10 @@ export default function Image({ src = unsplashImage, ...other }) {
     setRendered(false);
   }, [state, zoom]);
 
+  useEffect(() => {
+    console.log(src);
+  }, [src]);
+
   return (
     <mesh>
       <planeGeometry args={viewPort} />

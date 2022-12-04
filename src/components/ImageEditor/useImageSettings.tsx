@@ -7,5 +7,6 @@ export default function useImageSettings(
   const [settings, setSettings_] = useState(initialState);
   const setSettings = (key: keyof Settings) => (value: any) =>
     setSettings_((prev) => ({ ...prev, [key]: value }));
+
   return [settings, setSettings];
 }
