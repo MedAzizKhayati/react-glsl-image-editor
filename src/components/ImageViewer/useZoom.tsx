@@ -3,7 +3,7 @@ import { clamp } from "three/src/math/MathUtils";
 
 export default function useZoom() {
   const [zoom, setZoom] = useState(1);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   // listen to ctrl + mousewheel
   const handleWheel = (e: WheelEvent) => {

@@ -34,8 +34,8 @@ export default function Image({ src = unsplashImage, ...other }) {
   }, [state, zoom]);
 
   return (
-    <mesh scale={[...viewPort, 1]}>
-      <planeGeometry />
+    <mesh>
+      <planeGeometry args={viewPort} />
       <Suspense fallback={null}>
         <imageMaterial
           ref={ref}

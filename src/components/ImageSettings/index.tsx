@@ -18,12 +18,13 @@ export default function ImageSettings({
 }: ImageSettingsProps) {
   const {
     blurRadius = 0,
-    blurFactor = 1,
+    blurFactor = 4,
     gaussian = false,
     brightness = 0,
     contrast = 1,
     exposure = 0,
     saturation = 1,
+    noise = 0,
   } = settings;
 
   return (
@@ -51,14 +52,13 @@ export default function ImageSettings({
           value={blurRadius}
           setValue={setSettings("blurRadius")}
           min={0}
-          max={10}
+          max={16}
         />
 
         <SliderInput
           label={`Blur Factor: ${blurFactor}`}
           value={blurFactor}
           setValue={setSettings("blurFactor")}
-          disabled={!blurRadius}
           min="1"
           max="10"
           step="0.1"
@@ -99,6 +99,17 @@ export default function ImageSettings({
           setValue={setSettings("saturation")}
           min="0"
           max="2"
+          step="0.01"
+        />
+      </SettingsSection>
+
+      <SettingsSection title="settings">
+        <SliderInput
+          label={`Noise: ${(noise * 100).toFixed(0)}%`}
+          value={noise}
+          setValue={setSettings("noise")}
+          min="0"
+          max="1"
           step="0.01"
         />
       </SettingsSection>

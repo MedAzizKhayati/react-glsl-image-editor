@@ -9,6 +9,7 @@ export interface Settings {
   contrast?: number;
   exposure?: number;
   saturation?: number;
+  noise?: number;
 }
 
 export default function ImageViewer(settings: Settings) {
