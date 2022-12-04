@@ -10,6 +10,7 @@ export interface Settings {
   exposure?: number;
   saturation?: number;
   noise?: number;
+  src?: string;
 }
 
 export default function ImageViewer(settings: Settings) {
