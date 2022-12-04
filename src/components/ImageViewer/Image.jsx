@@ -1,10 +1,9 @@
 import * as THREE from "three";
 import { useLoader, useThree, useFrame } from "@react-three/fiber";
 import { Suspense, useRef, useState, useEffect } from "react";
-import ImageMaterial from "./ImageMaterial";
-import useViewport from "./useViewport";
-import useZoom from "./useZoom";
-
+import ImageMaterial from "./materials/ImageMaterial";
+import useViewport from "./hooks/useViewport";
+import useZoom from "./hooks/useZoom";
 const unsplashImage = "wall.jpg";
 
 export default function Image({ src = unsplashImage, ...other }) {
