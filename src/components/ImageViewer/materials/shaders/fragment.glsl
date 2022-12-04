@@ -31,7 +31,7 @@ vec4 adjustSaturation(vec4 color, float value) {
 }
 
 vec4 adjustNoise(vec4 color, vec2 uv, float value) {
-        // random number between 0 and 1
+    // random number between 0 and 1
     float noise = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
     if(noise < value) {
         int random = int(noise * 100.0);
