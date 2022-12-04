@@ -2,7 +2,14 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      maxHeight: {
+        '120': '30rem',
+      },
+      colors: {
+        buttonBlue: '#0375ff'
+      }
+    },
   },
   plugins: [],
 };

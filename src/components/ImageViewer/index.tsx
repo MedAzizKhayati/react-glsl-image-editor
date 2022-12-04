@@ -15,7 +15,7 @@ export interface Settings {
 
 export default function ImageViewer(settings: Settings) {
   return (
-    <Canvas>
+    <Canvas className="max-w-screen max-h-80 xl:max-h-120 mt-10">
       <Image {...settings} />
     </Canvas>
   );

@@ -29,13 +29,9 @@ export default function ImageSettings({
 
   return (
     <div
-      className={`bg-zinc-900 w-full flex gap-5 justify-evenly absolute left-0 bottom-0 p-5 rounded-t-2xl  
-         text-white shadow-2xl transition-all duration-500 ease-out ${
-           open ? "" : "translate-y-full"
-         }`}
+      className={`w-full max-w-[800px] mx-auto flex gap-5 justify-between p-5 rounded-t-2xl  mt-10 px-10
+         text-white`}
     >
-      <ToggleIcon open={open} setOpen={setOpen} />
-
       <SettingsSection title="spacial filters">
         <div className="flex gap-5 mr-auto">
           <input
