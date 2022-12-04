@@ -5,7 +5,7 @@ import ImageMaterial from "./ImageMaterial";
 import useViewport from "./useViewport";
 import useZoom from "./useZoom";
 
-const unsplashImage = "architecture.jpg";
+const unsplashImage = "wall.jpg";
 
 export default function Image({ src = unsplashImage, ...other }) {
   const ref = useRef();
