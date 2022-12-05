@@ -4,14 +4,15 @@ uniform vec2 resolution;
 uniform vec2 imageResolution;
 varying vec2 vUv;
 uniform float time;
-uniform float blurFactor;
 uniform float brightness;
 uniform float contrast;
 uniform float exposure;
 uniform float saturation;
 uniform float noise;
+uniform float blurFactor;
 uniform int blurRadius;
-uniform bool gaussian;
+uniform int blurType; // 0 = box, 1 = gaussian, 2 = median
+uniform int noiseType;
 
 vec4 adjustBrightness(vec4 color, float value) {
     return color + vec4(value);
@@ -30,9 +31,16 @@ vec4 adjustSaturation(vec4 color, float value) {
     return vec4(mix(gray, color.rgb, value), color.a);
 }
 
-vec4 adjustNoise(vec4 color, vec2 uv, float value) {
-    // random number between 0 and 1
-    float noise = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+float rand(vec2 uv, float seed) {
+    return fract(sin(dot(uv, vec2(12.9898, 78.233 + seed))) * (43758.5453));
+}
+
+vec3 randomVec3(vec2 uv, float seed) {
+    return vec3(rand(uv, seed + 0.1), rand(uv, seed + 0.5), rand(uv, seed + 0.9));
+}
+
+vec4 grayNoise(vec4 color, vec2 uv, float value) {
+    float noise = rand(uv, 0.0);
     if(noise < value) {
         int random = int(noise * 100.0);
         if(random % 2 == 0) {
@@ -44,8 +52,25 @@ vec4 adjustNoise(vec4 color, vec2 uv, float value) {
     return color;
 }
 
+vec4 colorNoise(vec4 color, vec2 uv, float value) {
+    vec3 noise = randomVec3(uv, 0.0);
+    if(noise.x < value) {
+        return vec4(noise, 1.0);
+    }
+    return color;
+}
+
 vec4 preProcess(vec4 color, vec2 uv) {
-    color = adjustNoise(color, uv, noise);
+    switch(noiseType) {
+        case 0:
+            color = colorNoise(color, uv, noise);
+            break;
+        case 1:
+            color = grayNoise(color, uv, noise);
+            break;
+        default:
+            break;
+    }
     return color;
 }
 
@@ -54,9 +79,27 @@ vec4 getTextureColor(vec2 uv) {
     return preProcess(color, uv);
 }
 
-vec4 blurCurrentPixel(vec2 uv, int blurRadius, float sigma) {
+vec4 applyBoxBlur(vec2 uv, int blurRadius, float sigma) {
     vec3 sum = vec3(0.0);
     vec2 onePixel = vec2(1.0) / imageResolution;
+    float avg = 0.0;
+
+    for(int x = -blurRadius; x <= blurRadius; x++) {
+        for(int y = -blurRadius; y <= blurRadius; y++) {
+            vec4 color;
+            color = getTextureColor(uv + vec2(x, y) * onePixel * sigma);
+            avg += 1.0;
+
+            sum += color.rgb;
+        }
+    }
+
+    return vec4(sum / avg, 1.0);
+}
+
+vec4 applyGaussianBlur(vec2 uv, int blurRadius, float sigma) {
+    vec3 sum = vec3(0.0);
+    vec2 onePixel = vec2(1.0) / imageResolution * 2.0;
     float avg = 0.0;
 
     float sigma_sq = sigma * sigma * 2.0;
@@ -65,23 +108,74 @@ vec4 blurCurrentPixel(vec2 uv, int blurRadius, float sigma) {
     for(int x = -blurRadius; x <= blurRadius; x++) {
         for(int y = -blurRadius; y <= blurRadius; y++) {
             vec4 color;
-            if(gaussian) {
-                float weight = exp(-float(x * x + y * y) / sigma_sq) / dividend;
-                color = getTextureColor(uv + vec2(x, y) * onePixel * 2.0) * weight;
-                avg += weight;
-            } else {
-                color = getTextureColor(uv + vec2(x, y) * onePixel * sigma);
-                avg += 1.0;
-            }
+            float weight = exp(-float(x * x + y * y) / sigma_sq) / dividend;
+            color = getTextureColor(uv + vec2(x, y) * onePixel) * weight;
+            avg += weight;
             sum += color.rgb;
         }
     }
     return vec4(sum / avg, 1.0);
 }
 
+vec4 applyMedianBlur(vec2 uv, int blurRadius) {
+    vec2 onePixel = vec2(1.0) / imageResolution;
+
+    if(blurRadius == 0) {
+        return getTextureColor(uv);
+    }
+    blurRadius = min(blurRadius, 5);
+    int N = blurRadius * 4 + 1;
+    vec3[21] pixels;
+    float[21] avgs;
+    int index = 0;
+    int x = 0;
+    int y = 0;
+    for(x = -blurRadius; x <= blurRadius; x++) {
+        pixels[index] = getTextureColor(uv + vec2(x, y) * onePixel).rgb;
+        avgs[index] = (pixels[index].r + pixels[index].g + pixels[index].b);
+        index++;
+    }
+    x = 0;
+    for(y = -blurRadius; y <= blurRadius; y++) {
+        if(y == 0)
+            continue;
+        pixels[index] = getTextureColor(uv + vec2(x, y) * onePixel).rgb;
+        avgs[index] = (pixels[index].r + pixels[index].g + pixels[index].b);
+        index++;
+    }
+
+    // sort the array
+    for(x = 0; x < N; x++) {
+        for(y = 0; y < N; y++) {
+            if(avgs[x] < avgs[y]) {
+                vec3 temp = pixels[x];
+                pixels[x] = pixels[y];
+                pixels[y] = temp;
+
+                float temp2 = avgs[x];
+                avgs[x] = avgs[y];
+                avgs[y] = temp2;
+            }
+        }
+    }
+
+    // return the median value
+    return vec4(pixels[N / 2], 1.0);
+}
+
+vec4 applySpacialFilters() {
+    if(blurType == 0) {
+        return applyBoxBlur(vUv, blurRadius, blurFactor);
+    } else if(blurType == 1) {
+        return applyGaussianBlur(vUv, blurRadius, blurFactor);
+    } else if(blurType == 2) {
+        return applyMedianBlur(vUv, blurRadius);
+    }
+}
+
 void main() {
     /* Spacial Filters */
-    gl_FragColor = blurCurrentPixel(vUv, blurRadius, blurFactor);
+    gl_FragColor = applySpacialFilters();
 
     /* Transform Filters */
     gl_FragColor = adjustContrast(gl_FragColor, contrast);

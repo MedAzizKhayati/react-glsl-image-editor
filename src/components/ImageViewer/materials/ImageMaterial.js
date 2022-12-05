@@ -7,20 +7,25 @@ import vertex_ from "./shaders/vertex.glsl";
 const FRAGMENT = await fetch(fragment_).then((response) => response.text());
 const VERTEX = await fetch(vertex_).then((response) => response.text());
 
+export const INITIAL_SETTINGS_STATE = {
+  blurRadius: 0,
+  blurFactor: 4,
+  brightness: 0,
+  contrast: 1,
+  exposure: 0,
+  saturation: 1,
+  noise: 0,
+  blurType: 0,
+  noiseType: 1,
+};
+
 export const MATERIAL_ARGS = {
   time: 0,
   uColor: new THREE.Color("#f02"),
   uTexture: new THREE.Texture(),
   resolution: new THREE.Vector2(),
   imageResolution: new THREE.Vector2(),
-  blurRadius: 0,
-  blurFactor: 4,
-  gaussian: false,
-  brightness: 0,
-  contrast: 1,
-  exposure: 0,
-  saturation: 1,
-  noise: 0,
+  ...INITIAL_SETTINGS_STATE,
 };
 
 const ImageMaterial = shaderMaterial(MATERIAL_ARGS, VERTEX, FRAGMENT);

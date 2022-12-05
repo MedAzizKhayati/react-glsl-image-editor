@@ -1,8 +1,8 @@
-export const Header = ({
-  setImageUrl,
-}: {
+export interface HeaderProps {
   setImageUrl: (url: string) => void;
-}) => {
+  handleDownload: () => void;
+}
+export const Header = ({ setImageUrl, handleDownload }: HeaderProps) => {
   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
     if (file?.type?.includes("image")) {
@@ -13,7 +13,11 @@ export const Header = ({
   };
   return (
     <div className="w-full py-5 flex flex-row justify-between items-center px-10">
-      <a className="px-4 py-2 bg-[#2c2c2c] rounded-lg text-gray-500 transition-all duration-300 cursor-pointer hover:text-white hover:bg-buttonBlue">
+      <a
+        href="https://github.com/MedAzizKhayati/react-glsl-image-editor"
+        target="_blank"
+        className="px-4 py-2 bg-[#2c2c2c] rounded-lg text-gray-500 transition-all duration-300 cursor-pointer hover:text-white hover:bg-buttonBlue"
+      >
         Check our github
       </a>
       <div className="flex flex-row gap-4">
@@ -26,7 +30,10 @@ export const Header = ({
             onChange={handleFileSelected}
           />
         </label>
-        <div className="text-xs flex flex-col items-center justify-center px-4 py-2 bg-gray-50 rounded-lg text-buttonBlue cursor-pointer transition-all duration-500 ease-out hover:-translate-y-1">
+        <div
+          onClick={handleDownload}
+          className="text-xs flex flex-col items-center justify-center px-4 py-2 bg-gray-50 rounded-lg text-buttonBlue cursor-pointer transition-all duration-500 ease-out hover:-translate-y-1"
+        >
           Download Image
         </div>
       </div>

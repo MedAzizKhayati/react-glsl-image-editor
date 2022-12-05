@@ -1,4 +1,5 @@
 import { Settings } from "../ImageViewer";
+import RadioInput from "./RadioInput";
 import SettingsSection from "./SettingsSection";
 import SliderInput from "./SliderInput";
 
@@ -10,34 +11,34 @@ export interface ImageSettingsProps {
 }
 
 export default function ImageSettings({
-  settings,
+  settings: {
+    blurRadius,
+    blurFactor,
+    brightness,
+    contrast,
+    exposure,
+    saturation,
+    noise,
+    blurType,
+    noiseType,
+  },
   setSettings,
 }: ImageSettingsProps) {
-  const {
-    blurRadius = 0,
-    blurFactor = 4,
-    gaussian = false,
-    brightness = 0,
-    contrast = 1,
-    exposure = 0,
-    saturation = 1,
-    noise = 0,
-  } = settings;
-
   return (
     <div
       className={`w-full max-w-[800px] flex gap-5 justify-between p-7 px-10 text-white`}
     >
       <SettingsSection title="spacial filters">
-        <div className="flex gap-5 mr-auto">
-          <input
-            id="gaussian"
-            type="checkbox"
-            checked={gaussian}
-            onChange={() => setSettings("gaussian")(!gaussian)}
-          />
-          <label htmlFor="gaussian">Gaussian Blur</label>
-        </div>
+        <RadioInput
+          title="Blur Type"
+          value={blurType}
+          setValue={setSettings("blurType")}
+          options={[
+            { label: "Box Blur", value: 0 },
+            { label: "Gaussian Blur", value: 1 },
+            { label: "Median Filter", value: 2 },
+          ]}
+        />
 
         <SliderInput
           label={`Blur Radius: ${blurRadius}`}
@@ -96,6 +97,15 @@ export default function ImageSettings({
       </SettingsSection>
 
       <SettingsSection title="settings">
+        <RadioInput
+          title="Noise Type"
+          value={noiseType}
+          setValue={setSettings("noiseType")}
+          options={[
+            { label: "Color Noise", value: 0 },
+            { label: "Pepper And Salt", value: 1 },
+          ]}
+        />
         <SliderInput
           label={`Noise: ${(noise * 100).toFixed(0)}%`}
           value={noise}
