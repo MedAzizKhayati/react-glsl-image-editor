@@ -6,6 +6,8 @@ import useViewport from "./hooks/useViewport";
 import useZoom from "./hooks/useZoom";
 import useMouseDown from "./hooks/useMouseDown";
 import getIntersectionPosition from "./helpers/getIntersectionPosition";
+import getPixelsArrayOfImage from "./helpers/getPixelsRelatedToImage";
+import { getViewport } from "./helpers/getViewport";
 const unsplashImage = "wall.jpg";
 
 export default function Image({
@@ -18,9 +20,8 @@ export default function Image({
   const [image] = useLoader(THREE.TextureLoader, [src]);
   const state = useThree();
   const { width, height } = useThree((state) => state.viewport);
-  const zoom = useZoom();
-  const [mouseDownPos, setMouseDownPos] = useState({});
-  const mouseDown = useMouseDown(state, () => setMouseDownPos({}));
+  const [zoom] = useZoom();
+  const mouseDownVec = useMouseDown(state);
 
   const viewPort = useViewport({
     image: image.image,
@@ -30,40 +31,17 @@ export default function Image({
   });
 
   useFrame((state) => {
-    if (mouseDown) {
-      // select mesh and set it to the mouse position
+    if (mouseDownVec) {
       const pos = getIntersectionPosition(state);
       if (!pos) return;
-      const { x, y } = pos;
-      if (mouseDownPos.x === undefined) {
-        mouseDownPos.x = x - ref.current.position.x;
-        mouseDownPos.y = y - ref.current.position.y;
-        setMouseDownPos(mouseDownPos);
-      } else {
-        ref.current.position.x = x - mouseDownPos.x;
-        ref.current.position.y = y - mouseDownPos.y;
-      }
-      setRendered(false);
+      ref.current.position.x = pos.x - mouseDownVec.x;
+      ref.current.position.y = pos.y - mouseDownVec.y;
+      state.gl.render(state.scene, state.camera);
     }
 
     if (rendered) return;
-    setRendered(true);
     state.gl.render(state.scene, state.camera);
-
-    let pixels = new Uint8Array(
-      state.gl.domElement.width * state.gl.domElement.height * 4
-    );
-    const context = state.gl.getContext();
-    context.readPixels(
-      0,
-      0,
-      state.gl.domElement.width,
-      state.gl.domElement.height,
-      context.RGBA,
-      context.UNSIGNED_BYTE,
-      pixels
-    );
-    setPixels(pixels);
+    setRendered(true);
   }, 1);
 
   const objectToValues = (obj) => {
@@ -71,13 +49,25 @@ export default function Image({
   };
 
   useEffect(() => {
+    const viewPort = getViewport({
+      image: image.image,
+      zoom: 1,
+      width,
+      height,
+    });
+    const pixels = getPixelsArrayOfImage(state, ref, viewPort, image.image);
+    setPixels(pixels);
+    setRendered(true);
+  }, [...objectToValues(other)]);
+
+  useEffect(() => {
     console.log("resetting");
     setRendered(false);
   }, [...objectToValues(other), zoom, width, height]);
 
   return (
-    <mesh ref={ref}>
-      <planeGeometry args={viewPort} />
+    <mesh ref={ref} scale={[...viewPort, 1]}>
+      <planeGeometry />
       <Suspense fallback={null}>
         <imageMaterial
           key={ImageMaterial.key}

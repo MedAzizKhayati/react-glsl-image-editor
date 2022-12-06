@@ -12,46 +12,47 @@ export interface ImageSettingsProps {
 
 export default function ImageSettings({
   settings: {
-    blurRadius,
-    blurFactor,
+    filterRadius,
+    filterStrength,
     brightness,
     contrast,
     exposure,
     saturation,
     noise,
-    blurType,
+    filterType,
     noiseType,
   },
   setSettings,
 }: ImageSettingsProps) {
   return (
     <div
-      className={`w-full max-w-[800px] flex gap-5 justify-between p-7 px-10 text-white`}
+      className={`w-full max-w-[800px] flex gap-5 justify-between py-7 px-10 text-white`}
     >
       <SettingsSection title="spacial filters">
         <RadioInput
-          title="Blur Type"
-          value={blurType}
-          setValue={setSettings("blurType")}
+          title="Filter Type"
+          value={filterType}
+          setValue={setSettings("filterType")}
           options={[
-            { label: "Box Blur", value: 0 },
-            { label: "Gaussian Blur", value: 1 },
-            { label: "Median Filter", value: 2 },
+            { label: "Box Blur", value: 0b1 },
+            { label: "Gaussian Blur", value: 0b10 },
+            { label: "Median Filter", value: 0b100 },
+            { label: "Sharpen (High Pass)", value: 0b1000 },
           ]}
         />
 
         <SliderInput
-          label={`Blur Radius: ${blurRadius}`}
-          value={blurRadius}
-          setValue={setSettings("blurRadius")}
+          label={`Filter Size: ${filterRadius * 2 + 1}x${filterRadius * 2 + 1}`}
+          value={filterRadius}
+          setValue={setSettings("filterRadius")}
           min={0}
-          max={16}
+          max={8}
         />
 
         <SliderInput
-          label={`Blur Factor: ${blurFactor}`}
-          value={blurFactor}
-          setValue={setSettings("blurFactor")}
+          label={`Filter Strength: ${filterStrength}`}
+          value={filterStrength}
+          setValue={setSettings("filterStrength")}
           min="1"
           max="10"
           step="0.1"

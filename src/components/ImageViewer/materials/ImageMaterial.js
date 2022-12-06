@@ -8,14 +8,14 @@ const FRAGMENT = await fetch(fragment_).then((response) => response.text());
 const VERTEX = await fetch(vertex_).then((response) => response.text());
 
 export const INITIAL_SETTINGS_STATE = {
-  blurRadius: 0,
-  blurFactor: 4,
+  filterRadius: 0,
+  filterStrength: 4,
+  filterType: 1,
   brightness: 0,
   contrast: 1,
   exposure: 0,
   saturation: 1,
   noise: 0,
-  blurType: 0,
   noiseType: 1,
 };
 

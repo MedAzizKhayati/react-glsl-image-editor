@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { clamp } from "three/src/math/MathUtils";
 
-export default function useZoom() {
+export default function useZoom(): [number, (zoom: number) => void] {
   const [zoom, setZoom] = useState(1);
   const [, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
@@ -35,5 +35,5 @@ export default function useZoom() {
     };
   }, []);
 
-  return zoom;
+  return [zoom, setZoom];
 }

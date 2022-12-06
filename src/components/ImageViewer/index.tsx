@@ -1,14 +1,19 @@
 import { Canvas } from "@react-three/fiber";
 import Image from "./Image";
 
+export interface PixelData {
+  data: Uint8ClampedArray;
+  size: number[];
+}
+
 export interface Settings {
   /* Image Source Url\Uri */
   src?: string;
-  setPixels?: (pixels: Uint8Array) => void;
+  setPixels?: (pixels: PixelData) => void;
   /* Spacial Filters */
-  blurType: number;
-  blurRadius: number;
-  blurFactor: number;
+  filterType: number;
+  filterRadius: number;
+  filterStrength: number;
   /* Color Filters */
   brightness: number;
   contrast: number;

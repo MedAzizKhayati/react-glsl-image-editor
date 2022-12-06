@@ -1,22 +1,23 @@
-import { RootState } from "@react-three/fiber";
+import { RootState, Vector2 } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import getIntersectionPosition from "../helpers/getIntersectionPosition";
 
 export default function useMouseDown(
   state: RootState,
-  callback?: (down: boolean) => void
+  callback?: (down: any) => void
 ) {
-  const [mouseDown, setMouseDown] = useState<boolean>(false);
+  const [mouseDown, setMouseDown] = useState<Vector2 | null>(null);
   useEffect(() => {
     const canvas = state.gl.domElement;
     canvas.style.cursor = "grab";
     const handleMouseDown = () => {
       canvas.style.cursor = "grabbing";
-      setMouseDown(true);
+      const pos = getIntersectionPosition(state, true);
+      setMouseDown(pos);
     };
     const handleMouseUp = () => {
       canvas.style.cursor = "grab";
-      setMouseDown(false);
-      callback?.(false);
+      setMouseDown(null);
     };
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mouseup", handleMouseUp);
