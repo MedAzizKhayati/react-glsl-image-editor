@@ -16,7 +16,7 @@ export const Header = ({ setImageUrl, handleDownload }: HeaderProps) => {
       <a
         href="https://github.com/MedAzizKhayati/react-glsl-image-editor"
         target="_blank"
-        className="px-4 py-2 bg-[#2c2c2c] rounded-lg text-gray-500 transition-all duration-300 cursor-pointer hover:text-white hover:bg-buttonBlue"
+        className="px-4 py-2 bg-[#2c2c2c] rounded-lg text-gray-400 transition-all duration-300 cursor-pointer hover:text-white hover:bg-buttonBlue"
       >
         Check our github
       </a>

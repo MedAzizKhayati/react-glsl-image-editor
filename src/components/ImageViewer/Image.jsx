@@ -33,15 +33,19 @@ export default function Image({
   useFrame((state) => {
     if (mouseDownVec) {
       const pos = getIntersectionPosition(state);
-      if (!pos) return;
-      ref.current.position.x = pos.x - mouseDownVec.x;
-      ref.current.position.y = pos.y - mouseDownVec.y;
-      state.gl.render(state.scene, state.camera);
+      if (pos) {
+        ref.current.position.set(
+          pos.x - mouseDownVec.x,
+          pos.y - mouseDownVec.y,
+          0
+        );
+        state.gl.render(state.scene, state.camera);
+      }
     }
-
-    if (rendered) return;
-    state.gl.render(state.scene, state.camera);
-    setRendered(true);
+    if (!rendered) {
+      state.gl.render(state.scene, state.camera);
+      setRendered(true);
+    }
   }, 1);
 
   const objectToValues = (obj) => {
@@ -58,12 +62,12 @@ export default function Image({
     const pixels = getPixelsArrayOfImage(state, ref, viewPort, image.image);
     setPixels(pixels);
     setRendered(true);
-  }, [...objectToValues(other)]);
+  }, [...objectToValues(other), src]);
 
   useEffect(() => {
     console.log("resetting");
     setRendered(false);
-  }, [...objectToValues(other), zoom, width, height]);
+  }, [...objectToValues(other), zoom, width, height, src]);
 
   return (
     <mesh ref={ref} scale={[...viewPort, 1]}>
@@ -71,7 +75,6 @@ export default function Image({
       <Suspense fallback={null}>
         <imageMaterial
           key={ImageMaterial.key}
-          resolution={[width, height]}
           imageResolution={[image?.image?.width, image?.image?.height]}
           uTexture={image}
           {...other}

@@ -20,10 +20,7 @@ export const INITIAL_SETTINGS_STATE = {
 };
 
 export const MATERIAL_ARGS = {
-  time: 0,
-  uColor: new THREE.Color("#f02"),
   uTexture: new THREE.Texture(),
-  resolution: new THREE.Vector2(),
   imageResolution: new THREE.Vector2(),
   ...INITIAL_SETTINGS_STATE,
 };

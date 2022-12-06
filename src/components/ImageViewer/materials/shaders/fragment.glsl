@@ -1,9 +1,6 @@
 uniform sampler2D uTexture;
-uniform vec3 uColor;
-uniform vec2 resolution;
 uniform vec2 imageResolution;
 varying vec2 vUv;
-uniform float time;
 uniform float brightness;
 uniform float contrast;
 uniform float exposure;

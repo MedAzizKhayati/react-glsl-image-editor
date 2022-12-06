@@ -27,6 +27,6 @@
     "**/*.tsx",
     "src/utils/getTimer.js",
     "src/components/Timer/index.jsx"
-  ],
+, "src/components/ImageViewer/Image.jsx"  ],
   "exclude": ["node_modules"]
 }

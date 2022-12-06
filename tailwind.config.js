@@ -4,11 +4,11 @@ module.exports = {
   theme: {
     extend: {
       maxHeight: {
-        '120': '30rem',
+        120: "30rem",
       },
       colors: {
-        buttonBlue: '#0375ff'
-      }
+        buttonBlue: "#0375ff",
+      },
     },
   },
   plugins: [],

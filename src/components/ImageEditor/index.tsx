@@ -10,7 +10,7 @@ export default function ImageEditor() {
   const [toggleSettings, setToggleSettings] = useState(false);
   const [settings, setSettings] = useImageSettings();
   const [pixels, setPixels] = useState<PixelData>();
-  const imageService = pixels && new ImageService(pixels);
+  const imageService = pixels && new ImageService(pixels);  
 
   return (
     <div className="w-full h-full relative flex flex-col items-center overflow-hidden bg-[#121212]">
