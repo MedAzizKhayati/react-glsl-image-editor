@@ -1,5 +1,6 @@
 import { Settings } from "../ImageViewer";
 import RadioInput from "./RadioInput";
+import RGBInput from "./RGBInput";
 import SettingsSection from "./SettingsSection";
 import SliderInput from "./SliderInput";
 
@@ -21,12 +22,14 @@ export default function ImageSettings({
     noise,
     filterType,
     noiseType,
+    threshold,
+    thresholdType,
   },
   setSettings,
 }: ImageSettingsProps) {
   return (
     <div
-      className={`w-full max-w-[800px] flex gap-5 justify-between py-7 px-10 text-white`}
+      className={`w-full max-w-[1000px] flex gap-10 justify-between py-7 px-10 text-white`}
     >
       <SettingsSection title="spacial filters">
         <RadioInput
@@ -97,13 +100,27 @@ export default function ImageSettings({
         />
       </SettingsSection>
 
+      <SettingsSection title="Threshold">
+        <RadioInput
+          title="Threshold Type"
+          value={thresholdType}
+          setValue={setSettings("thresholdType")}
+          options={[
+            { label: "Single Channel", value: 0 },
+            { label: "All Channels", value: 1 },
+            { label: "Some Channels", value: 2 },
+          ]}
+        />
+        <RGBInput values={threshold} setValues={setSettings("threshold")} />
+      </SettingsSection>
+
       <SettingsSection title="settings">
         <RadioInput
           title="Noise Type"
           value={noiseType}
           setValue={setSettings("noiseType")}
           options={[
-            { label: "Color Noise", value: 0 },
+            { label: "RGB Noise", value: 0 },
             { label: "Pepper And Salt", value: 1 },
           ]}
         />
@@ -115,36 +132,6 @@ export default function ImageSettings({
           max="1"
           step="0.01"
         />
-        <h3 className="-mb-2 mt-2">Threshold</h3>
-        <div className="flex flex-wrap justify-start items-end gap-3 text-sm">
-          <div className="flex flex-col items-center">
-            <label>R</label>
-            <input
-              type="number"
-              min={0}
-              max={255}
-              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded text-center"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <label>G</label>
-            <input
-              type="number"
-              min={0}
-              max={255}
-              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <label>B</label>
-            <input
-              type="number"
-              min={0}
-              max={255}
-              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded"
-            />
-          </div>
-        </div>
       </SettingsSection>
     </div>
   );

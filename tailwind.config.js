@@ -8,6 +8,8 @@ module.exports = {
       },
       colors: {
         buttonBlue: "#0375ff",
+        primaryBackground: "#121212",
+        secondaryBackground: "#2c2c2c",
       },
     },
   },

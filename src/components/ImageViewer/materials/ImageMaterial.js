@@ -17,6 +17,8 @@ export const INITIAL_SETTINGS_STATE = {
   saturation: 1,
   noise: 0,
   noiseType: 1,
+  threshold: [0, 0, 0],
+  thresholdType: 0,
 };
 
 export const MATERIAL_ARGS = {

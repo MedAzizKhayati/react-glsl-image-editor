@@ -1,4 +1,5 @@
 uniform sampler2D uTexture;
+uniform vec3 threshold;
 uniform vec2 imageResolution;
 varying vec2 vUv;
 uniform float brightness;
@@ -8,8 +9,9 @@ uniform float saturation;
 uniform float noise;
 uniform float filterStrength;
 uniform int filterRadius;
-uniform int filterType; // 0 = box, 1 = gaussian, 2 = median
+uniform int filterType;
 uniform int noiseType;
+uniform int thresholdType; // 0 = or, 1 = or, 2 = single
 
 float rand(vec2 uv, float seed) {
     return fract(sin(dot(uv, vec2(12.9898, 78.233 + seed))) * (43758.5453));
@@ -19,13 +21,40 @@ vec3 randomVec3(vec2 uv, float seed) {
     return vec3(rand(uv, seed + 0.1), rand(uv, seed + 0.5), rand(uv, seed + 0.9));
 }
 
-vec4 threshold(vec4 color, vec3 threshold_) {
+vec4 thresholdImage(vec4 color, vec3 threshold_) {
     // if color is less than threshold, return 0.0, else return the same color
-    if(color.r < threshold_.r && color.g < threshold_.g && color.b < threshold_.b) {
-        return vec4(0.0, 0.0, 0.0, 1.0);
-    } else {
-        return color;
+    if(thresholdType == 0) {
+        float r, g, b;
+        if(color.r <= threshold_.r) {
+            r = 0.0;
+        } else {
+            r = color.r;
+        }
+        if(color.g <= threshold_.g) {
+            g = 0.0;
+        } else {
+            g = color.g;
+        }
+        if(color.b <= threshold_.b) {
+            b = 0.0;
+        } else {
+            b = color.b;
+        }
+        return vec4(r, g, b, 1.0);
+    } else if(thresholdType == 1) {
+        if(color.r < threshold_.r && color.g < threshold_.g && color.b < threshold_.b) {
+            return vec4(0.0, 0.0, 0.0, 1.0);
+        } else {
+            return color;
+        }
+    } else if(thresholdType == 2) {
+        if(color.r < threshold_.r || color.g < threshold_.g || color.b < threshold_.b) {
+            return vec4(0.0, 0.0, 0.0, 1.0);
+        } else {
+            return color;
+        }
     }
+    return color;
 }
 
 vec4 adjustBrightness(vec4 color, float value) {
@@ -213,5 +242,6 @@ void main() {
     gl_FragColor = adjustBrightness(gl_FragColor, brightness);
     gl_FragColor = adjustExposure(gl_FragColor, exposure);
     gl_FragColor = adjustSaturation(gl_FragColor, saturation);
-    gl_FragColor = threshold(gl_FragColor, vec3(0.0));
+    gl_FragColor = thresholdImage(gl_FragColor, threshold);
+    // gl_FragColor = vec4(threshold, 1.0);
 }

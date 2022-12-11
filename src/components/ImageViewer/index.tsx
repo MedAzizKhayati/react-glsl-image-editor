@@ -22,6 +22,9 @@ export interface Settings {
   /* Noise */
   noise: number;
   noiseType: number;
+  /* Settings */
+  threshold: number[];
+  thresholdType: number;
 }
 
 export default function ImageViewer(settings: Settings) {
