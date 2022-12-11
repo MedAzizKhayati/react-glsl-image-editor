@@ -13,13 +13,12 @@ export default class ImageService {
         this.width = image.size[0];
         this.height = image.size[1];
     }
-
     getHistogram() {
         const histogram = this.data.reduce((acc, val, i) => {
             if(i % 4 === 3) return acc; // skip alpha channel (i % 4 === 3)
             acc[val][i % 4] += 1;
             return acc;
-        }, new Array(256).fill([0, 0, 0]));
+        }, Array(256).fill(0).map(() => [0, 0, 0]));
         return histogram;
     }
 
@@ -32,7 +31,7 @@ export default class ImageService {
             }
             acc[i] = val.map((v: any, j:any) => v + acc[i - 1][j]);
             return acc;
-        }, new Array(256).fill([0, 0, 0]));
+        }, new Array(256).fill(0).map(() => [0, 0, 0]));
         return cummulativeHistogram;
     }
 

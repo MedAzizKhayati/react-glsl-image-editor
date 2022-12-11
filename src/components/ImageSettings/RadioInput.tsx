@@ -22,7 +22,7 @@ export default function RadioInput({
             value={v}
             name={title}
           />
-          <label htmlFor={label}>{label}</label>
+          <label className="text-sm" htmlFor={label}>{label}</label>
         </div>
       ))}
     </form>
