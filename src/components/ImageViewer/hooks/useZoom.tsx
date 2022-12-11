@@ -21,7 +21,7 @@ export default function useZoom(): [number, (zoom: number) => void] {
           return prev;
         }
         speed *= 0.8;
-        return clamp(prev + delta * speed, 0.8, 5);
+        return clamp(prev + delta * speed, 0.8, 10);
       });
     }, 20);
 

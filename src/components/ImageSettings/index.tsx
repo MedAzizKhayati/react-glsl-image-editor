@@ -46,7 +46,7 @@ export default function ImageSettings({
           value={filterRadius}
           setValue={setSettings("filterRadius")}
           min={0}
-          max={8}
+          max={10}
         />
 
         <SliderInput
@@ -115,6 +115,36 @@ export default function ImageSettings({
           max="1"
           step="0.01"
         />
+        <h3 className="-mb-2 mt-2">Threshold</h3>
+        <div className="flex flex-wrap justify-start items-end gap-3 text-sm">
+          <div className="flex flex-col items-center">
+            <label>R</label>
+            <input
+              type="number"
+              min={0}
+              max={255}
+              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded text-center"
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <label>G</label>
+            <input
+              type="number"
+              min={0}
+              max={255}
+              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded"
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <label>B</label>
+            <input
+              type="number"
+              min={0}
+              max={255}
+              className="outline-none w-10 p-1 bg-[#2c2c2c] rounded"
+            />
+          </div>
+        </div>
       </SettingsSection>
     </div>
   );

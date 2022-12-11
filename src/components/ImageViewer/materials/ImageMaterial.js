@@ -9,7 +9,7 @@ const VERTEX = await fetch(vertex_).then((response) => response.text());
 
 export const INITIAL_SETTINGS_STATE = {
   filterRadius: 0,
-  filterStrength: 4,
+  filterStrength: 1,
   filterType: 1,
   brightness: 0,
   contrast: 1,

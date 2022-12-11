@@ -21,7 +21,7 @@ export default function ImageStats({ pixels }: { pixels?: PixelData }) {
         setStats(imageService.getStatistics());
       }
     },
-    100,
+    50,
     [pixels]
   );
 

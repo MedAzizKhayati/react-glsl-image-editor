@@ -3,7 +3,7 @@ import Image from "./Image";
 
 export interface PixelData {
   data: Uint8ClampedArray;
-  size: number[];
+  size: [number, number];
 }
 
 export interface Settings {

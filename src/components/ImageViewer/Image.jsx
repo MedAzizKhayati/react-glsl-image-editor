@@ -8,7 +8,8 @@ import useMouseDown from "./hooks/useMouseDown";
 import getIntersectionPosition from "./helpers/getIntersectionPosition";
 import getPixelsArrayOfImage from "./helpers/getPixelsRelatedToImage";
 import { getViewport } from "./helpers/getViewport";
-const unsplashImage = "wall.jpg";
+import useDebounce from "../../hooks/useDebounce";
+const unsplashImage = "nature.jpg";
 
 export default function Image({
   src = unsplashImage,
@@ -51,8 +52,8 @@ export default function Image({
   const objectToValues = (obj) => {
     return Object.keys(obj).map((key) => obj[key]);
   };
-
-  useEffect(() => {
+  
+  useDebounce(() => {
     const viewPort = getViewport({
       image: image.image,
       zoom: 1,
@@ -62,7 +63,7 @@ export default function Image({
     const pixels = getPixelsArrayOfImage(state, ref, viewPort, image.image);
     setPixels(pixels);
     setRendered(true);
-  }, [...objectToValues(other), src]);
+  }, 200, [...objectToValues(other), src]);
 
   useEffect(() => {
     console.log("resetting");

@@ -19,6 +19,15 @@ vec3 randomVec3(vec2 uv, float seed) {
     return vec3(rand(uv, seed + 0.1), rand(uv, seed + 0.5), rand(uv, seed + 0.9));
 }
 
+vec4 threshold(vec4 color, vec3 threshold_) {
+    // if color is less than threshold, return 0.0, else return the same color
+    if(color.r < threshold_.r && color.g < threshold_.g && color.b < threshold_.b) {
+        return vec4(0.0, 0.0, 0.0, 1.0);
+    } else {
+        return color;
+    }
+}
+
 vec4 adjustBrightness(vec4 color, float value) {
     return color + vec4(value);
 }
@@ -77,21 +86,19 @@ vec4 getTextureColor(vec2 uv) {
 }
 
 vec4 applyBoxBlur(vec2 uv, int radius, float strength) {
-    vec3 sum = vec3(0.0);
+    vec4 sum = vec4(0.0);
     vec2 onePixel = vec2(1.0) / imageResolution;
-    float avg = 0.0;
+    float numberOfPixels = float((radius * 2 + 1) * (radius * 2 + 1));
 
     for(int x = -radius; x <= radius; x++) {
         for(int y = -radius; y <= radius; y++) {
             vec4 color;
             color = getTextureColor(uv + vec2(x, y) * onePixel * strength);
-            avg += 1.0;
-
-            sum += color.rgb;
+            sum += color;
         }
     }
 
-    return vec4(sum / avg, 1.0);
+    return sum / numberOfPixels;
 }
 
 vec4 applyHighPassFilter(vec2 uv, int radius, float strength) {
@@ -201,9 +208,10 @@ void main() {
     /* Spacial Filters */
     gl_FragColor = applySpacialFilters();
 
-    /* Transform Filters */
+    // /* Transform Filters */
     gl_FragColor = adjustContrast(gl_FragColor, contrast);
     gl_FragColor = adjustBrightness(gl_FragColor, brightness);
     gl_FragColor = adjustExposure(gl_FragColor, exposure);
     gl_FragColor = adjustSaturation(gl_FragColor, saturation);
+    gl_FragColor = threshold(gl_FragColor, vec3(0.0));
 }
