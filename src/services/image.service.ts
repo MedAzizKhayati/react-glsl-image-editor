@@ -19,7 +19,7 @@ export default class ImageService {
             if(i % 4 === 3) return acc; // skip alpha channel (i % 4 === 3)
             acc[val][i % 4] += 1;
             return acc;
-        }, new Array(256).fill([0, 0, 0]));
+        }, Array(256).fill(0).map(() => [0, 0, 0]));
         return histogram;
     }
 
