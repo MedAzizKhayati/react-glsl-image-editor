@@ -15,11 +15,12 @@ export default class ImageService {
     }
 
     getHistogram() {
-        const histogram = this.data.reduce((acc, val) => {
-            acc[val] += 1;
+        const histogram = this.data.reduce((acc, val, i) => {
+            if(i % 4 === 3) return acc; // skip alpha channel (i % 4 === 3)
+            acc[val][i % 4] += 1;
             return acc;
-        }, new Array(256).fill(0));
-        return histogram.map(val => val / (this.data.length / 4));
+        }, new Array(256).fill([0, 0, 0]));
+        return histogram;
     }
 
     getMinimum() {
@@ -61,7 +62,7 @@ export default class ImageService {
     getStatistics() {
         const mean = this.getMean().map(v => v.toFixed(0));
         const standardDeviation = this.getStandardDeviation().map(v => v.toFixed(0));
-        const histogram = this.getHistogram().map(v => v.toFixed(2));
+        const histogram = this.getHistogram();
         const max = this.getMaximum();
         const min = this.getMinimum();
         return {
