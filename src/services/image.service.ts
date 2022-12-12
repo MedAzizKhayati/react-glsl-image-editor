@@ -13,7 +13,6 @@ export default class ImageService {
         this.width = image.size[0];
         this.height = image.size[1];
     }
-
     getHistogram() {
         const histogram = this.data.reduce((acc, val, i) => {
             if(i % 4 === 3) return acc; // skip alpha channel (i % 4 === 3)
@@ -21,6 +20,19 @@ export default class ImageService {
             return acc;
         }, Array(256).fill(0).map(() => [0, 0, 0]));
         return histogram;
+    }
+
+    getCumulativeHistogram() {
+        const histogram = this.getHistogram();
+        const cummulativeHistogram = histogram.reduce((acc, val, i) => {    
+            if(i === 0) {
+                acc[i] = val;
+                return acc;
+            }
+            acc[i] = val.map((v: any, j:any) => v + acc[i - 1][j]);
+            return acc;
+        }, new Array(256).fill(0).map(() => [0, 0, 0]));
+        return cummulativeHistogram;
     }
 
     getMinimum() {
@@ -65,10 +77,12 @@ export default class ImageService {
         const histogram = this.getHistogram();
         const max = this.getMaximum();
         const min = this.getMinimum();
+        const cumulativeHistogram = this.getCumulativeHistogram();
         return {
             mean: mean.slice(0, 3).join(", "),
             standardDeviation: standardDeviation.slice(0, 3).join(", "),
             histogram,
+            cumulativeHistogram,
             max: max.slice(0, 3).join(", "),
             min: min.slice(0, 3).join(", "),
         };

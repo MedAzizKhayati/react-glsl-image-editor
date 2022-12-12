@@ -41,6 +41,8 @@ export default function ImageSettings({
             { label: "Gaussian Blur", value: 0b10 },
             { label: "Median Filter", value: 0b100 },
             { label: "Sharpen (High Pass)", value: 0b1000 },
+            { label: "Edge Detection (Erosion)", value: 0b10000 },
+            { label: "Dilation", value: 0b100000 },
           ]}
         />
 

@@ -217,6 +217,34 @@ vec4 applyMedianBlur(vec2 uv, int radius) {
     return vec4(pixels[N / 2], 1.0);
 }
 
+vec4 applyErosion(vec2 uv, int radius) {
+    vec2 onePixel = vec2(1.0) / imageResolution;
+    vec3 min_ = vec3(1.0);
+
+    for(int x = -radius; x <= radius; x++) {
+        for(int y = -radius; y <= radius; y++) {
+            vec3 color = getTextureColor(uv + vec2(x, y) * onePixel).rgb;
+            min_ = min(min_, color);
+        }
+    }
+
+    return vec4(min_, 1.0);
+}
+
+vec4 applyDilation(vec2 uv, int radius) {
+    vec2 onePixel = vec2(1.0) / imageResolution;
+    vec3 max_ = vec3(0.0);
+
+    for(int x = -radius; x <= radius; x++) {
+        for(int y = -radius; y <= radius; y++) {
+            vec3 color = getTextureColor(uv + vec2(x, y) * onePixel).rgb;
+            max_ = max(max_, color);
+        }
+    }
+
+    return vec4(max_, 1.0);
+}
+
 bool nThBit(int n, int x) {
     return (n & (1 << x)) != 0;
 }
@@ -230,6 +258,12 @@ vec4 applySpacialFilters() {
         return applyMedianBlur(vUv, filterRadius);
     } else if(nThBit(filterType, 3)) {
         return applyHighPassFilter(vUv, filterRadius, filterStrength);
+    } else if(nThBit(filterType, 4)) {
+        return applyErosion(vUv, filterRadius);
+    } else if(nThBit(filterType, 5)) {
+        return applyDilation(vUv, filterRadius);
+    } else {
+        return getTextureColor(vUv);
     }
 }
 
