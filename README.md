@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# This is a react based image editor Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This App is made possible thanks to Three.JS and GLSL that helped managing low-level Graphics Card parallel processing of images.
 
 ## Available Scripts
 
