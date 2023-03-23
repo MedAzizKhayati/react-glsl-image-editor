@@ -2,6 +2,8 @@
 
 This App is made possible thanks to Three.JS and GLSL that helped managing low-level Graphics Card parallel processing of images.
 
+![screenshot](https://user-images.githubusercontent.com/68187294/227242253-6560ff23-d721-4702-8188-2d4e1006b453.png)
+
 ## Available Scripts
 
 In the project directory, you can run:
